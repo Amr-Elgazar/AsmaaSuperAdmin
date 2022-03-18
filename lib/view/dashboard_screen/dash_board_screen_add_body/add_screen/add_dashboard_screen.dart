@@ -1,5 +1,4 @@
 import 'package:asmaasuperadmin/utils/core/size_config.dart';
-import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_add_body/add_screen/widget/add_brand.dart';
 import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_add_body/add_screen/widget/add_category.dart';
 import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_add_body/add_screen/widget/add_section.dart';
 import 'package:asmaasuperadmin/widgets/custom_button.dart';
@@ -39,11 +38,6 @@ class _AddDashboardScreenState extends State<AddDashboardScreen> {
                 context,
                 MaterialPageRoute(builder: (context) => const addCategory()),
               );}),
-              ListViewScreen(text: 'إضافه ماركه', icon: 'assets/icons/add-to-cart.png', onPress: (){Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const addbrand()),
-              );}),
-              ListViewScreen(text: 'إضافه سلعه', icon: 'assets/icons/add-to-cart.png', onPress: (){}),
             ],
           ),
         ),

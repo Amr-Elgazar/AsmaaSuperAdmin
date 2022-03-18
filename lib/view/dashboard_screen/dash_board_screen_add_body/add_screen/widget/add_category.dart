@@ -5,6 +5,9 @@ import 'dart:ui';
 import 'package:asmaasuperadmin/Api/api.dart';
 import 'package:asmaasuperadmin/Modules/section_model.dart';
 import 'package:asmaasuperadmin/utils/core/size_config.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../../widgets/custom_button.dart';
@@ -20,11 +23,20 @@ class addCategory extends StatefulWidget {
 
 class _addCategoryState extends State<addCategory> {
   TextEditingController nameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController productNumController = TextEditingController();
+  TextEditingController sellingPriceController = TextEditingController();
+  TextEditingController purchasePriceController = TextEditingController();
+  TextEditingController wholesalePriceController = TextEditingController();
+  TextEditingController installmentPriceController = TextEditingController();
+  TextEditingController productCodeController = TextEditingController();
 
   bool adding = false;
 
   List<Sections> sections = [], brands = [];
   bool isTapped4 = true, isExpanded4 = false;
+  String hintImage = 'لم يتم إختيار صورة';
+
   int sectionId = 0;
 
   String? imageBase64;
@@ -48,33 +60,145 @@ class _addCategoryState extends State<addCategory> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(),
-        body: Container(
+        body: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                    width: 200,
-                    child: CustomTextFormField(
-                      text: 'اسم الصنف',
-                      controller: nameController,
-                    )),
-              ),
-              CustomText(
-                text: 'Amrelgazar.png',
-                color: Colors.grey,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: SizeConfig.screenWidth! * 0.4,
+                      child: TextFormField(
+                        controller: nameController,
+                        decoration: const InputDecoration(
+                            labelText: 'اسم الصنف',
+                            border: OutlineInputBorder()),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: SizeConfig.screenWidth! * 0.4,
+                      child: TextFormField(
+                        controller: descriptionController,
+                        decoration: const InputDecoration(
+                            labelText: 'الوصف', border: OutlineInputBorder()),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 10,
               ),
-              CustomButton(
-                text: CustomText(
-                  text: 'صوره الصنف',
-                ),
-                icon: const Icon(
-                  Icons.add,
-                ),
-                onPress: () => chooseImage(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: SizeConfig.screenWidth! * 0.4,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        controller: productNumController,
+                        decoration: const InputDecoration(
+                            labelText: 'عدد الصنف',
+                            border: OutlineInputBorder()),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: SizeConfig.screenWidth! * 0.4,
+                      child: TextFormField(
+                        controller: purchasePriceController,
+                        decoration: const InputDecoration(
+                            labelText: 'سعر الشراء من المورد',
+                            border: OutlineInputBorder()),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: SizeConfig.screenWidth! * 0.4,
+                      child: TextFormField(
+                        controller: sellingPriceController,
+                        decoration: const InputDecoration(
+                            labelText: 'سعر البيع للعميل',
+                            border: OutlineInputBorder()),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: SizeConfig.screenWidth! * 0.4,
+                      child: TextFormField(
+                        controller: wholesalePriceController,
+                        decoration: const InputDecoration(
+                            labelText: 'سعر الجملة للعميل',
+                            border: OutlineInputBorder()),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: SizeConfig.screenWidth! * 0.4,
+                      child: TextFormField(
+                        controller: installmentPriceController,
+                        decoration: const InputDecoration(
+                            labelText: 'سعر القسط للعميل',
+                            border: OutlineInputBorder()),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: SizeConfig.screenWidth! * 0.4,
+                      child: TextFormField(
+                        controller: productCodeController,
+                        decoration: const InputDecoration(
+                            labelText: 'كود الصنف',
+                            border: OutlineInputBorder()),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const Divider(
                 color: Colors.grey,
@@ -86,24 +210,27 @@ class _addCategoryState extends State<addCategory> {
               const SizedBox(
                 height: 20,
               ),
-              Container(
-                height: 60,
-                width: SizeConfig.screenWidth! * 0.5,
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  border: Border.all(
-                      color: Colors.blue, // set border color
-                      width: 1.0), // set border width
-                  borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                  // set rounded corner radius
-                ),
-                child: const Center(
-                  child: Text(
-                    'إضافة صنف',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0),
+              InkWell(
+                onTap: () => onPressed(),
+                child: Container(
+                  height: 60,
+                  width: SizeConfig.screenWidth! * 0.5,
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    border: Border.all(
+                        color: Colors.blue, // set border color
+                        width: 1.0), // set border width
+                    borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                    // set rounded corner radius
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'إضافة صنف',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0),
+                    ),
                   ),
                 ),
               )
@@ -233,38 +360,125 @@ class _addCategoryState extends State<addCategory> {
     );
   }
 
-  void chooseImage() async {
-    PickedFile? pickedFile =
-        await ImagePicker.platform.pickImage(source: ImageSource.gallery);
-    setState(() {
-      try {
-        setState(() {
-          File file = File(pickedFile!.path);
-          imageBase64 = base64Encode(file.readAsBytesSync()).toString();
-        });
-      } catch (e) {
-        print(e);
-      }
-    });
-  }
-
   void onPressed() {
     if (nameController.text.isEmpty &&
-        imageBase64 == null &&
-        _radioChooseSection == 0) {
+        _radioChooseSection == 0 &&
+        productNumController.text.isEmpty &&
+        purchasePriceController.text.isEmpty &&
+        sellingPriceController.text.isEmpty &&
+        wholesalePriceController.text.isEmpty &&
+        installmentPriceController.text.isEmpty &&
+        productCodeController.text.isEmpty) {
+      _showErrorDialog('من فضلك قم بإدخال جميع البيانات', 'إضافة صنف', context);
+    } else if (nameController.text.isEmpty) {
+      _showErrorDialog('من فضلك قم بإدخال إسم الصنف', 'إضافة صنف', context);
+    } else if (productNumController.text.isEmpty) {
+      _showErrorDialog('من فضلك قم بإدخال عدد الصنف بالمخزن', 'إضافة صنف', context);
+    } else if (purchasePriceController.text.isEmpty) {
+      _showErrorDialog('من فضلك قم بإدخال سعر الشراء من المورد', 'إضافة صنف', context);
+    } else if (sellingPriceController.text.isEmpty) {
+      _showErrorDialog('من فضلك قم بإدخال سعر البيع للعميل', 'إضافة صنف', context);
+    } else if (wholesalePriceController.text.isEmpty) {
+      _showErrorDialog('من فضلك قم بإدخال سعر الجملة للعميل', 'إضافة صنف', context);
+    } else if (installmentPriceController.text.isEmpty) {
+      _showErrorDialog('من فضلك قم بإدخال سعر القسط للعميل', 'إضافة صنف', context);
+    } else if (productCodeController.text.isEmpty) {
+      _showErrorDialog('من فضلك قم بإدخال كود الصنف', 'إضافة صنف', context);
+    } else if (_radioChooseSection == 0) {
+      _showErrorDialog('من فضلك قم بإختيار القسم الخاص بالصنف', 'إضافة صنف', context);
     } else {
-      setState(() {
-        adding = true;
-      });
-      ServData.addCategories(
-              name: nameController.text,
-              sectionId: sectionId,
-              image: imageBase64)
-          .whenComplete(() {
+      if(descriptionController.text.isEmpty) {
         setState(() {
-          adding = false;
+          adding = true;
         });
-      });
+        ServData.addCategories(
+          name: nameController.text,
+          description:descriptionController.text,
+          productNum:productNumController.text,
+          sellingPrice:sellingPriceController.text,
+          purchasePrice:purchasePriceController.text,
+          wholesalePrice:wholesalePriceController.text,
+          installmentPrice: installmentPriceController.text,
+          productCode:productCodeController.text,
+          sectionId:  sectionId,
+        ).whenComplete(() {
+          _showSuccessDialog(context , 'تمت إضافة الصنف بنجاح');
+          setState(() {
+            adding = false;
+            _radioChooseSection = 0;
+            nameController.clear();
+            productNumController.clear();
+            sellingPriceController.clear();
+            purchasePriceController.clear();
+            wholesalePriceController.clear();
+            installmentPriceController.clear();
+            productCodeController.clear();
+          });
+        });
+      }else{
+        setState(() {
+          adding = true;
+        });
+        ServData.addCategories(
+          name: nameController.text,
+          description: descriptionController.text,
+          productNum: productNumController.text,
+          sellingPrice: sellingPriceController.text,
+          purchasePrice: purchasePriceController.text,
+          wholesalePrice: wholesalePriceController.text,
+          installmentPrice: installmentPriceController.text,
+          productCode: productCodeController.text,
+          sectionId: sectionId,
+        ).whenComplete(() {
+          _showSuccessDialog(context , 'تمت إضافة الصنف بنجاح');
+          setState(() {
+            adding = false;
+            _radioChooseSection = 0;
+            nameController.clear();
+            _radioChooseSection = 0;
+            nameController.clear();
+            productNumController.clear();
+            sellingPriceController.clear();
+            purchasePriceController.clear();
+            wholesalePriceController.clear();
+            installmentPriceController.clear();
+            productCodeController.clear();
+            descriptionController.clear();
+          });
+        });
+      }
     }
   }
+
+  void _showSuccessDialog(BuildContext context , String message) {
+    AwesomeDialog(
+        context: context,
+        animType: AnimType.LEFTSLIDE,
+        headerAnimationLoop: false,
+        dialogType: DialogType.SUCCES,
+        showCloseIcon: false,
+        title: 'إضافة صنف',
+        desc: message,
+        btnOkOnPress: () {},
+        btnOkIcon: Icons.check_circle,
+        onDissmissCallback: (type) {
+
+        }).show();
+  }
+
+  void _showErrorDialog(String message, String title, BuildContext context) {
+
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.ERROR,
+        animType: AnimType.RIGHSLIDE,
+        headerAnimationLoop: true,
+        title: title,
+        desc: message,
+        btnOkOnPress: () {},
+        btnOkIcon: Icons.cancel,
+        btnOkColor: Colors.red).show();
+
+  }
+
 }

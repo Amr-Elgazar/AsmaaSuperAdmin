@@ -56,42 +56,7 @@ class _AddSectionState extends State<AddSection> {
               const Divider(
                 color: Colors.grey,
               ),
-              Column(
-                children: [
-                  Material(
-                    elevation: 10,
-                    child: Container(
-                      color: Colors.white,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          CircleAvatar(
-                            child: Image.asset('assets/logo.jpg'),
-                            backgroundColor: Colors.white,
-                            radius: 50,
-                          ),
-                          CustomText(
-                            text: 'أسم القسم',
-                            fontSize: 20,
-                          ),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.edit,
-                                color: Colors.green,
-                              )),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.remove,
-                                color: Colors.red,
-                              )),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              )
+
             ],
           ),
         ),
@@ -103,7 +68,6 @@ class _AddSectionState extends State<AddSection> {
     if (nameController.text.isEmpty) {
       print('5555555Upload');
     } else {
-      print('Upload');
       setState(() {
         adding = true;
       });
