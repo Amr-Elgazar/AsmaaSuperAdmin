@@ -13,6 +13,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController passController = TextEditingController() ;
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -25,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Container(
                 alignment: Alignment.center,
-                  child: const CustomTextFormField(text: 'كلمه السر ؟')),
+                  child:  CustomTextFormField(text: 'كلمه السر ؟', controller: passController,)),
               const SizedBox(height: 20,),
               CustomButton(
                   text: CustomText(text: 'تسجيل الدخول'),
