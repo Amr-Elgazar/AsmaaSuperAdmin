@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:asmaasuperadmin/Modules/products_model.dart';
 import 'package:asmaasuperadmin/Modules/section_model.dart';
 import 'package:asmaasuperadmin/utils/Constants/const.dart';
 
@@ -53,6 +54,17 @@ class ServData {
       return response.body;
     } else {
       return null;
+    }
+  }
+
+
+  static Future<List<Products>> getProducts() async {
+    String baseUrl = root + 'get.php?action=GET_ALL_Product';
+    var response = await http.get(Uri.parse(baseUrl));
+    if (response.statusCode == 200) {
+      return productsFromJson(response.body);
+    } else {
+      return [];
     }
   }
 
