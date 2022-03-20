@@ -1,9 +1,10 @@
-import 'package:asmaasuperadmin/widgets/custom_text.dart';
-import 'package:asmaasuperadmin/widgets/primary_color.dart';
+import 'package:asmaasuperadmin/utils/core/size_config.dart';
+import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_add_body/widgets/product/products.dart';
 import 'package:flutter/material.dart';
-import 'dash_board_screen_add_body/add_screen/add_dashboard_screen.dart';
-import 'dash_board_screen_add_body/widgets/listview.dart';
 
+import 'dash_board_screen_add_body/widgets/SiedMenu/side_menu.dart';
+import 'dash_board_screen_add_body/widgets/add_screen/add_category.dart';
+import 'dash_board_screen_add_body/widgets/add_screen/add_section.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -13,27 +14,53 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  int index = 0 ;
+  Widget screens({required possition}) {
+    if (possition == 0) {
+       getPossition(index :possition);
+      return const ProductsData();
+    } else if (possition == 1) {
+        getPossition(index :possition);
+      return const AddSection();
+    } else if (possition == 2) {
+      getPossition(index :possition);
+      return const AddCategory();
+    }else {
+      return Container();
+    }
+  }
+
+  int getPossition({int index = 0}) {
+    setState(() {
+      this.index = index;
+    });
+
+    return index;
+  }
+
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-               ListViewScreen(text: 'أضافه', icon: 'assets/icons/add-to-cart.png', onPress: (){
-                 Navigator.push(
-                   context,
-                   MaterialPageRoute(builder: (context) => const AddDashboardScreen()),
-                 );
-               }),
-                ListViewScreen(text: 'أداره حسابات', icon: 'assets/icons/accounts.png', onPress: (){}),
-                ListViewScreen(text: 'الجرد', icon: 'assets/icons/inventory.png', onPress: (){}),
-                ListViewScreen(text: 'تقارير', icon: 'assets/icons/report.png', onPress: (){}),
-              ],
-            ),
+        drawer: SideMenu(
+          screensControl: screens,
+          getPossition: getPossition(index: index),
+        ),
+        body: SafeArea(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                  child: SideMenu(
+                screensControl: screens,
+                getPossition: getPossition(index: index),
+              )),
+              Expanded(flex: 5, child: screens(possition: index))
+            ],
           ),
+        ),
       ),
     );
   }

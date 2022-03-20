@@ -1,27 +1,20 @@
-import 'dart:convert';
-import 'dart:io';
 import 'dart:ui';
-
 import 'package:asmaasuperadmin/Api/api.dart';
 import 'package:asmaasuperadmin/Modules/section_model.dart';
 import 'package:asmaasuperadmin/utils/core/size_config.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import '../../../../../widgets/custom_button.dart';
-import '../../../../../widgets/custom_text.dart';
-import '../../../../../widgets/custom_text_form_field.dart';
 
-class addCategory extends StatefulWidget {
-  const addCategory({Key? key}) : super(key: key);
+
+class AddCategory extends StatefulWidget {
+  const AddCategory({Key? key}) : super(key: key);
 
   @override
-  State<addCategory> createState() => _addCategoryState();
+  State<AddCategory> createState() => _AddCategoryState();
 }
 
-class _addCategoryState extends State<addCategory> {
+class _AddCategoryState extends State<AddCategory> {
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController productNumController = TextEditingController();
@@ -59,7 +52,6 @@ class _addCategoryState extends State<addCategory> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(),
         body: SingleChildScrollView(
           child: Column(
             children: [
