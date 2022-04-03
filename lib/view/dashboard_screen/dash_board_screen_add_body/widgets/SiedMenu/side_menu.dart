@@ -48,17 +48,12 @@ class SideMenu extends StatelessWidget {
             index: getPossition,
             press: () => screensControl(possition: 4),
           ),
+
           DrawerListTile(
-            title: "حسابات الجملة",
+            title: "حسابات الكاش أو الجملة",
             possition: 5,
             index: getPossition,
             press: () => screensControl(possition: 5),
-          ),
-          DrawerListTile(
-            title: "حسابات حسابات الكاش",
-            possition: 6,
-            index: getPossition,
-            press: () => screensControl(possition: 6),
           ),
         ],
       ),

@@ -119,7 +119,7 @@ class _ProductsDataState extends State<ProductsData> {
                       margin:
                           EdgeInsets.only(top: SizeConfig.screenHeight! * 0.01),
                       width: SizeConfig.screenWidth!,
-                      height: SizeConfig.screenHeight! * 0.05,
+                      height: SizeConfig.screenHeight! * 0.5,
                       child: ListView.builder(
                           itemCount: products.isEmpty ? 0 : products.length,
                           itemBuilder: (context, index) => ItemBody(

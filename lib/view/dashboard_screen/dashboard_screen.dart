@@ -1,5 +1,6 @@
 import 'package:asmaasuperadmin/utils/core/size_config.dart';
 import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_add_body/widgets/product/products.dart';
+import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_orders_cash/all_our_orders.dart';
 import 'package:flutter/material.dart';
 
 import 'dash_board_screen_add_body/widgets/SiedMenu/side_menu.dart';
@@ -25,6 +26,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     } else if (possition == 2) {
       getPossition(index :possition);
       return const AddCategory();
+    }else if (possition == 3) {
+      getPossition(index :possition);
+      return  const Orders();
     }else {
       return Container();
     }
