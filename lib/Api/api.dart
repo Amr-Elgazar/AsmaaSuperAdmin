@@ -69,6 +69,16 @@ class ServData {
     }
   }
 
+  static Future<List<Products>> getProductsForSection({required String id}) async {
+    String baseUrl = root + 'get.php?action=GET_ALL_Product_FOR_SECTION&id=$id';
+    var response = await http.get(Uri.parse(baseUrl));
+    if (response.statusCode == 200) {
+      return productsFromJson(response.body);
+    } else {
+      return [];
+    }
+  }
+
   static Future<ShowOrders?> getOurOrders() async {
     String baseUrl = root + 'get.php?action=GET_ALL_Orders';
     var response = await http.get(Uri.parse(baseUrl));

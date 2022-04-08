@@ -17,7 +17,8 @@ class _ProductsDataState extends State<ProductsData> {
   bool loading = true;
   List<Sections> sections = [];
   List<Products> products = [];
-  int possition = 0;
+  int possition = -1;
+  String sectionName = 'جميع المنتجات';
 
   @override
   void initState() {
@@ -78,9 +79,16 @@ class _ProductsDataState extends State<ProductsData> {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
-                              setState(() {
-                                loading = true;
-                                possition = index;
+                            setState(() {
+                              loading=true;
+                            });
+                              ServData.getProductsForSection(id: sections[index].id).then((value) {
+                                  setState(() {
+                                  products = value;
+                                  loading = false;
+                                  possition = index;
+                                });
+
                               });
                             },
                             child: Container(
@@ -89,10 +97,10 @@ class _ProductsDataState extends State<ProductsData> {
                               margin: EdgeInsets.symmetric(
                                   horizontal: SizeConfig.screenWidth! * 0.005,
                                   vertical: SizeConfig.screenHeight! * 0.003),
-                              decoration: const BoxDecoration(
-                                color: Colors.blue,
+                              decoration:  BoxDecoration(
+                                color:possition == index?Colors.blue.withOpacity(0.65) :Colors.blue,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(25)),
+                                    const BorderRadius.all(Radius.circular(25)),
                               ),
                               child: Row(
                                 mainAxisAlignment:
@@ -114,6 +122,29 @@ class _ProductsDataState extends State<ProductsData> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                     InkWell(
+                       onTap: () {
+                         setState(() {
+                           loading = true;
+                           possition =-1;
+                         });
+                         ServData.getProducts().then((value) {
+                           setState(() {
+                             products = value;
+                             loading = false;
+                           });
+                         });
+                       },
+                       child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 10.0),
+                        child: Text(
+                           sectionName,
+                          style: const TextStyle(
+                              fontSize: 16.0, fontWeight: FontWeight.bold),
+                        ),
+                    ),
+                     ),
                     ItemHeader(),
                     Container(
                       margin:

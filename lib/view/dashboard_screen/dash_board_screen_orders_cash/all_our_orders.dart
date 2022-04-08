@@ -4,8 +4,9 @@ import 'package:asmaasuperadmin/Api/api.dart';
 import 'package:asmaasuperadmin/Modules/all_orders.dart';
 import 'package:asmaasuperadmin/Modules/order_model.dart';
 import 'package:asmaasuperadmin/utils/core/size_config.dart';
-import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_orders_cash/invoice_header.dart';
-import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_orders_cash/itemList.dart';
+import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_orders_cash/widgets/invoice_header.dart';
+import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_orders_cash/widgets/item%20_%20Order.dart';
+import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_orders_cash/widgets/itemList.dart';
 import 'package:flutter/material.dart';
 
 class Orders extends StatefulWidget {
@@ -17,8 +18,7 @@ class Orders extends StatefulWidget {
 
 class _OrdersState extends State<Orders> {
   ShowOrders? showOrders;
-  List<Order> ourOrders = [];
-  bool isTapped4 = true, isExpanded4 = false;
+  List<Order> ourOrders = [], ourOrders2 = [];
   bool isLoading = false;
 
   @override
@@ -29,9 +29,40 @@ class _OrdersState extends State<Orders> {
       setState(() {
         showOrders = value;
         ourOrders = showOrders!.orders;
+        ourOrders2 = showOrders!.orders;
         isLoading = true;
       });
     });
+  }
+  void filterSearch(String query) {
+    List<Order> dummyData = ourOrders2;
+    if (query.isNotEmpty) {
+      List<Order> resultSearchProduct = [];
+      for (int x = 0; x < dummyData.length; x++) {
+        if (dummyData[x]
+            .name
+            .replaceAll('"', '')
+            .toLowerCase()
+            .contains(query.toLowerCase())) {
+          resultSearchProduct.add(dummyData[x]);
+        }else  if (dummyData[x]
+            .phone
+            .replaceAll('"', '')
+            .toLowerCase()
+            .contains(query.toLowerCase())) {
+          resultSearchProduct.add(dummyData[x]);
+        }
+      }
+      setState(() {
+        ourOrders = resultSearchProduct;
+      });
+      return;
+    } else {
+      setState(() {
+        ourOrders = [];
+        ourOrders = ourOrders2;
+      });
+    }
   }
 
   @override
@@ -44,145 +75,47 @@ class _OrdersState extends State<Orders> {
               body: Container(
                 width: SizeConfig.screenWidth!,
                 height: SizeConfig.screenHeight!,
-                child: ListView.builder(
-                    itemCount: ourOrders.isEmpty ? 0 : ourOrders.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                            top: 25.0, right: 10.0, left: 10.0),
-                        child: AnimatedContainer(
-                          duration: const Duration(seconds: 1),
-                          curve: Curves.fastLinearToSlowEaseIn,
-                          height: isTapped4
-                              ? isExpanded4
-                                  ? 100
-                                  : 100
-                              : isExpanded4
-                                  ? 225
-                                  : 300,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.blue, // set border color
-                                width: 1.0), // set border width
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(5.0)),
-                            // set rounded corner radius
-                          ),
-                          child: isTapped4
-                              ? Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.topLeft,
-                                        child: IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              isTapped4 = !isTapped4;
-                                            });
-                                          },
-                                          icon: Icon(
-                                            isTapped4
-                                                ? Icons.keyboard_arrow_down
-                                                : Icons.keyboard_arrow_up,
-                                            color: Colors.blue,
-                                            size: 27,
-                                          ),
-                                        ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                              child: Text('الإسم : ' +
-                                                  ourOrders[index].name)),
-                                          Expanded(
-                                              child: Text('رقم الهاتف : ' +
-                                                  ourOrders[index].phone)),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                              child: Text('عدد المنتجات : ' +
-                                                  ourOrders[index].productNum)),
-                                          Expanded(
-                                              child: Text('نوع الفاتورة : ' +
-                                                  ourOrders[index]
-                                                      .invoiceType)),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ListView(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.topLeft,
-                                        child: IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              isTapped4 = !isTapped4;
-                                            });
-                                          },
-                                          icon: Icon(
-                                            isTapped4
-                                                ? Icons.keyboard_arrow_down
-                                                : Icons.keyboard_arrow_up,
-                                            color: Colors.blue,
-                                            size: 27,
-                                          ),
-                                        ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                              child: Text('الإسم : ' +
-                                                  ourOrders[index].name)),
-                                          Expanded(
-                                              child: Text('رقم الهاتف : ' +
-                                                  ourOrders[index].phone)),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                              child: Text('عدد المنتجات : ' +
-                                                  ourOrders[index].productNum)),
-                                          Expanded(
-                                              child: Text('نوع الفاتورة : ' +
-                                                  ourOrders[index]
-                                                      .invoiceType)),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 8.0),
-                                        child: InvoiceHeader(
-                                            invoiceType:
-                                                ourOrders[index].invoiceType),
-                                      ),
-                                      SizedBox(
-                                          width: SizeConfig.screenWidth,
-                                          height:
-                                              SizeConfig.screenHeight! * 0.2,
-                                          child: ItemList(
-                                              products:
-                                                  ourOrders[index].products,
-                                              qtys: jsonDecode(
-                                                  ourOrders[index].qty),
-                                              prices: jsonDecode(
-                                                  ourOrders[index].prices))),
-                                      Text('إجمالي الفاتورة : ' +
-                                          ourOrders[index].total)
-                                    ],
-                                  ),
-                                ),
+                child:Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        onChanged: (v){
+                          if(v.isEmpty){
+                            setState(() {
+                              ourOrders = ourOrders2;
+                            });
+                          }else{
+                            filterSearch(v);
+                          }
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'بحث بإسم العميل أو الضامن رقم هاتف العميل أو الضامن',
+                          border: OutlineInputBorder(),
+                          suffixIcon: Icon(Icons.search),
+
                         ),
-                      );
-                    }),
+
+                      ),
+                    ),
+                    ourOrders.isEmpty? Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text('لا يوجد أي طلبات متاحة الآن')
+                        ],
+                      ),
+                    ): Expanded(
+                      child: ListView.builder(
+                          itemCount: ourOrders.isEmpty ? 0 : ourOrders.length,
+                          itemBuilder: (context, index) {
+
+                            return OrderItem(orders: ourOrders[index]);
+                          }),
+                    ),
+                  ],
+                )
               ),
             ),
           )
