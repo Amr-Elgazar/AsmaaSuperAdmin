@@ -96,7 +96,7 @@ class _ItemBodyState extends State<ItemBody> {
             child: Align(
             alignment : Alignment.center,
               child: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.remove_circle,
                   color: Colors.red,
                 ),
