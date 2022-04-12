@@ -16,9 +16,10 @@ class ProductsData extends StatefulWidget {
 class _ProductsDataState extends State<ProductsData> {
   bool loading = true;
   List<Sections> sections = [];
-  List<Products> products = [];
+  List<Products> products = [] , products2 = [];
   int possition = -1;
   String sectionName = 'جميع المنتجات';
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -31,6 +32,7 @@ class _ProductsDataState extends State<ProductsData> {
       ServData.getProducts().then((value) {
         setState(() {
           products = value;
+          products2 = value;
         });
       }).whenComplete((){ setState(() {
             loading = false;
@@ -38,22 +40,35 @@ class _ProductsDataState extends State<ProductsData> {
     });
   }
 
-  updatePage(){
-       loading = true;
-    ServData.getSections().then((value) {
+  void filterSearch(String query) {
+    List<Products> dummyData = products2;
+    if (query.isNotEmpty) {
+      List<Products> resultSearchProduct = [];
+      for (int x = 0; x < dummyData.length; x++) {
+        if (dummyData[x]
+            .productCode
+            .replaceAll('"', '')
+            .toLowerCase()
+            .contains(query.toLowerCase())) {
+          resultSearchProduct.add(dummyData[x]);
+        }else if (dummyData[x]
+            .name
+            .replaceAll('"', '')
+            .toLowerCase()
+            .contains(query.toLowerCase())) {
+          resultSearchProduct.add(dummyData[x]);
+        }
+      }
       setState(() {
-        sections = value;
+        products = resultSearchProduct;
       });
-    }).whenComplete(() {
-      ServData.getProducts().then((value) {
-        setState(() {
-          products = value;
-        });
-      }).whenComplete(() {
-         setState(() {
-        loading = false;
-      });});
-    });
+      return;
+    } else {
+      setState(() {
+        products = [];
+        products = products2;
+      });
+    }
   }
 
   @override
@@ -78,6 +93,21 @@ class _ProductsDataState extends State<ProductsData> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: searchController,
+                        onChanged: (value) {
+                          filterSearch(value);
+                        },
+                        onFieldSubmitted: (v) {
+                          filterSearch(v);
+                        },
+                        decoration: const InputDecoration(
+                            labelText: 'إضافه رقم السلعه',
+                            border: OutlineInputBorder()),
+                      ),
+                    ),
                     const Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: 10.0, vertical: 10.0),
