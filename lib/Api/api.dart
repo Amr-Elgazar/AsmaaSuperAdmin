@@ -58,6 +58,41 @@ class ServData {
     }
   }
 
+  static Future<String?> updateCategories(
+      {required String id,
+        required String name,
+        required String  description,
+        required String  productNum ,
+        required String  purchasePrice,
+        required String  sellingPrice,
+        required String  wholesalePrice,
+        required String  installmentPrice,
+        required String  productCode,
+        required int sectionId}) async {
+    String baseUrl = root + 'add.php';
+    var map = {
+      'action': 'UPDATE_PRODUCTS',
+      'id':id,
+      'name': name,
+      'description':description,
+      'productNum':productNum,
+      'purchasePrice' :purchasePrice,
+      'sellingPrice' : sellingPrice,
+      'wholesalePrice':wholesalePrice,
+      'installmentPrice': installmentPrice,
+      'productCode': productCode,
+      'sectionId' :jsonEncode(sectionId)
+    };
+
+    var response = await http.post(Uri.parse(baseUrl), body: map);
+    if (response.statusCode == 200) {
+      print(response.body);
+      return response.body;
+    } else {
+      return null;
+    }
+  }
+
 
   static Future<List<Products>> getProducts() async {
     String baseUrl = root + 'get.php?action=GET_ALL_Product';
@@ -86,6 +121,25 @@ class ServData {
       return showOrdersFromJson(response.body);
     } else {
       return null;
+    }
+  }
+
+  static Future<String> paidINSTALLMENT({
+
+    required String amountPaid,
+    required int id,
+  }) async {
+    String baseUrl = root + 'orders.php';
+    var map = {
+      'action': 'PAID_INSTALLMENT',
+      'amountPaid': amountPaid,
+      'id': '$id',
+    };
+    var response = await http.post(Uri.parse(baseUrl), body: map);
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return '';
     }
   }
 

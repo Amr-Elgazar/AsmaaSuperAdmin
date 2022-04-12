@@ -8,7 +8,12 @@ import 'package:asmaasuperadmin/utils/core/size_config.dart';
 import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_orders_cash/widgets/invoice_header.dart';
 import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_orders_cash/widgets/item%20_%20Order.dart';
 import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_orders_cash/widgets/itemList.dart';
+import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_orders_cash/widgets_cash/item%20_%20Order_cash.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+
+import '../../../widgets/custom_button.dart';
+import '../../../widgets/primary_color.dart';
 
 class OrdersCash extends StatefulWidget {
   const OrdersCash({Key? key}) : super(key: key);
@@ -20,7 +25,10 @@ class OrdersCash extends StatefulWidget {
 class _OrdersCashState extends State<OrdersCash> {
   ShowOrders? showOrders;
   List<Order> ourOrders = [], ourOrders2 = [];
+  List<String> time = ['جميع التواريخ'] , time2=[];
+  String timeSelected= 'جميع التواريخ';
   bool isLoading = false;
+  double total = 0.0,amountPaid = 0.0 , total2 = 0.0 , amountPaid2 = 0.0;
 
   @override
   void initState() {
@@ -33,11 +41,26 @@ class _OrdersCashState extends State<OrdersCash> {
           if(element.invoiceType == 'كاش' ||element.invoiceType == 'جملة' ){
             ourOrders.add(element) ;
             ourOrders2.add(element) ;
+            if(!time.contains(element.created_at)){
+              time.add(element.created_at);
+              time2 = time;
+            }
+            total += double.parse(element.total);
+            amountPaid += double.parse(element.amountPaid);
+            total2 += double.parse(element.total);
+            amountPaid2 += double.parse(element.amountPaid);
           }
         });
         isLoading = true;
       });
     });
+  }
+
+  updateResults(){
+    for(int x = 0 ; x< ourOrders.length ; x++){
+      total += double.parse(ourOrders[x].total);
+      amountPaid += double.parse(ourOrders[x].amountPaid);
+    }
   }
 
   void filterSearch(String query) {
@@ -50,13 +73,41 @@ class _OrdersCashState extends State<OrdersCash> {
             .replaceAll('"', '')
             .toLowerCase()
             .contains(query.toLowerCase())) {
+
           resultSearchProduct.add(dummyData[x]);
-        }else  if (dummyData[x]
+          setState(() {
+            total = 0.0;
+            amountPaid = 0.0 ;
+            total += double.parse(dummyData[x].total);
+            amountPaid += double.parse(dummyData[x].amountPaid);
+          });
+
+        }else if (dummyData[x]
             .phone
             .replaceAll('"', '')
             .toLowerCase()
             .contains(query.toLowerCase())) {
+
           resultSearchProduct.add(dummyData[x]);
+          setState(() {
+            total = 0.0;
+            amountPaid = 0.0 ;
+            total += double.parse(dummyData[x].total);
+            amountPaid += double.parse(dummyData[x].amountPaid);
+          });
+
+        }else if (dummyData[x]
+            .created_at
+            .replaceAll('"', '')
+            .toLowerCase()
+            .contains(query.toLowerCase())) {
+          resultSearchProduct.add(dummyData[x]);
+          setState(() {
+            total = 0.0;
+            amountPaid = 0.0 ;
+            total += double.parse(dummyData[x].total);
+            amountPaid += double.parse(dummyData[x].amountPaid);
+          });
         }
       }
       setState(() {
@@ -67,9 +118,40 @@ class _OrdersCashState extends State<OrdersCash> {
       setState(() {
         ourOrders = [];
         ourOrders = ourOrders2;
+
+          total = total2;
+          amountPaid = amountPaid2 ;
+
+
       });
     }
   }
+
+  void filterTime(String query) {
+    List<String> dummyData = time;
+    if (query.isNotEmpty) {
+      List<String> resultSearchProduct = [];
+      for (int x = 0; x < dummyData.length; x++) {
+        if (dummyData[x]
+            .replaceAll('"', '')
+            .toLowerCase()
+            .contains(query.toLowerCase())) {
+          resultSearchProduct.add(dummyData[x]);
+
+        }
+      }
+      setState(() {
+        time = resultSearchProduct;
+      });
+      return;
+    } else {
+      setState(() {
+        time = [];
+        time = time2;
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +186,40 @@ class _OrdersCashState extends State<OrdersCash> {
 
                 ),
               ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  width: SizeConfig.screenWidth! * 0.5,
+                  child: DropdownSearch<String>(
+                      mode: Mode.MENU,
+                      selectedItem: timeSelected,
+                      items: time,
+                      hint: timeSelected,
+                      showSearchBox: true,
+                      popupItemDisabled: (String s) => s.startsWith('I'),
+                      onChanged: (s){
+                        if('جميع التواريخ' == s){
+                          ourOrders=[];
+                          ourOrders = ourOrders2;
+                          setState(() {
+                            total = total2;
+                            amountPaid = amountPaid2 ;
+                          });
+
+                        }else {
+                          filterSearch(s!);
+                        }
+                      },
+                      ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                Text('مبيعات اليوم : $total'),
+                Text('المحصل  : $amountPaid'),
+                Text('المتبقي : ${total-amountPaid}'),
+              ],),
             ourOrders.isEmpty? Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -118,10 +234,11 @@ class _OrdersCashState extends State<OrdersCash> {
                 child: ListView.builder(
                     itemCount: ourOrders.isEmpty ? 0 : ourOrders.length,
                     itemBuilder: (context, index) {
-                      return OrderItem(orders: ourOrders[index]);
+                      return OrderItemCash(orders: ourOrders[index]);
                     }),
               ),
             ),
+
           ],)
         ),
       ),
@@ -139,4 +256,7 @@ class _OrdersCashState extends State<OrdersCash> {
       ),
     );
   }
+
+
+
 }

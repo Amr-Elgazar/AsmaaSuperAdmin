@@ -13,7 +13,8 @@ class Order {
    required this.products,
    required this.qty,
    required this.prices,
-   required this.discount
+   required this.discount,
+    required this.created_at
   });
 
   String id;
@@ -27,6 +28,7 @@ class Order {
   String qty;
   String prices;
   String discount;
+  String created_at;
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
     id: json["id"],
@@ -40,6 +42,7 @@ class Order {
     qty: json["qty"],
     prices: json["prices"],
     discount: json['discount'],
+    created_at: json['created_at'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -53,6 +56,7 @@ class Order {
     "products": List<dynamic>.from(products.map((x) => x.toJson())),
     "qty": qty,
     "prices": prices,
-    "discount" : discount
+    "discount" : discount,
+    "created_at": created_at
   };
 }

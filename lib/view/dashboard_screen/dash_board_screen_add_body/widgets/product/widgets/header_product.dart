@@ -22,16 +22,22 @@ class _ItemHeaderState extends State<ItemHeader> {
           Expanded(
             child: CustomText(text: 'اسم السلعه',color: primaryColor,fontSize: 18,),
           ),
-          Expanded(
-            child: CustomText(text: 'السعر',color: primaryColor,fontSize: 18,),
-          ),
-          Expanded(
-            child: CustomText(text: 'الرقم',color: primaryColor,fontSize: 18,),
-          ),
-          Expanded(
-            child: CustomText(text: 'سعر القسط',color: primaryColor,fontSize: 18,),
-          ),
-          Expanded(child: CustomText(text: 'الكمية',color: primaryColor,fontSize: 18,),),
+          Expanded(child: Row(
+            children: [
+              Expanded(child: CustomText(text: 'السعر',color: primaryColor,fontSize: 18,),),
+              Expanded(child: CustomText(text: 'الرقم',color: primaryColor,fontSize: 18,),),
+            ],
+          )),
+
+          Expanded(child: Row(children: [
+            Expanded(child: CustomText(text: 'سعر القسط',color: primaryColor,fontSize: 18,),),
+            Expanded(child: CustomText(text: 'الكمية',color: primaryColor,fontSize: 18,),),
+
+          ],)),
+
+          Expanded(child: Align(alignment : Alignment.center,child: CustomText(text: 'تعديل',color: primaryColor,fontSize: 18,)),),
+
+          Expanded(child: Align(alignment : Alignment.center,child: CustomText(text: 'حذف',color: primaryColor,fontSize: 18,)),),
         ],
       ),
     );

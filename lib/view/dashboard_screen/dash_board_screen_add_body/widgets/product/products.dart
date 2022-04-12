@@ -32,9 +32,27 @@ class _ProductsDataState extends State<ProductsData> {
         setState(() {
           products = value;
         });
-      }).whenComplete(() => setState(() {
+      }).whenComplete((){ setState(() {
             loading = false;
-          }));
+          });});
+    });
+  }
+
+  updatePage(){
+       loading = true;
+    ServData.getSections().then((value) {
+      setState(() {
+        sections = value;
+      });
+    }).whenComplete(() {
+      ServData.getProducts().then((value) {
+        setState(() {
+          products = value;
+        });
+      }).whenComplete(() {
+         setState(() {
+        loading = false;
+      });});
     });
   }
 
@@ -160,6 +178,7 @@ class _ProductsDataState extends State<ProductsData> {
                                 selling: products[index].sellingPrice,
                                 wholesale: products[index].wholesalePrice,
                                 quantity: products[index].productNum,
+                                product: products[index],
                               )),
                     ),
                   ],
