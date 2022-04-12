@@ -1,8 +1,12 @@
+import 'package:asmaasuperadmin/Api/api.dart';
 import 'package:asmaasuperadmin/Modules/products_model.dart';
 import 'package:asmaasuperadmin/view/dashboard_screen/dash_board_screen_add_body/widgets/add_screen/update_product.dart';
 import 'package:asmaasuperadmin/widgets/custom_text.dart';
 import 'package:asmaasuperadmin/widgets/primary_color.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../dashboard_screen.dart';
 
 class ItemBody extends StatefulWidget {
   String id, name, selling, wholesale, installmentPrice, quantity;
@@ -96,12 +100,58 @@ class _ItemBodyState extends State<ItemBody> {
                   Icons.remove_circle,
                   color: Colors.red,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  ServData.deleteProduct(id: int.parse(widget.product.id)).then((value) {
+                    if(value == 'Delete PRODUCT successfully'){
+                      _showSuccessDialog(context, 'تم الحذف بنجاح');
+                    }else{
+                      _showErrorDialog('لم يتم الحذف ', 'حذف المنتجات', context);
+                    }
+                  }).whenComplete(() {
+
+                  });
+                },
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  void _showSuccessDialog(BuildContext context , String message) {
+    AwesomeDialog(
+        context: context,
+        animType: AnimType.LEFTSLIDE,
+        headerAnimationLoop: false,
+        dialogType: DialogType.SUCCES,
+        showCloseIcon: false,
+        title: 'حذف المنتجات',
+        desc: message,
+        btnOkOnPress: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const DashboardScreen()),
+          );
+        },
+        btnOkIcon: Icons.check_circle,
+        onDissmissCallback: (type) {
+
+        }).show();
+  }
+
+  void _showErrorDialog(String message, String title, BuildContext context) {
+
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.ERROR,
+        animType: AnimType.RIGHSLIDE,
+        headerAnimationLoop: true,
+        title: title,
+        desc: message,
+        btnOkOnPress: () {},
+        btnOkIcon: Icons.cancel,
+        btnOkColor: Colors.red).show();
+
   }
 }

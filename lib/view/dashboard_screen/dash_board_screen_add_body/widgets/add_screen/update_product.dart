@@ -455,7 +455,7 @@ class _UpdateProductState extends State<UpdateProduct> {
           productCode: productCodeController.text,
           sectionId: int.parse(widget.product.sectionId),
         ).whenComplete(() {
-          _showSuccessDialog(context , 'تمت إضافة الصنف بنجاح');
+          _showSuccessDialog(context , 'تمت تعديل الصنف بنجاح');
           setState(() {
             adding = false;
             _radioChooseSection = 0;
