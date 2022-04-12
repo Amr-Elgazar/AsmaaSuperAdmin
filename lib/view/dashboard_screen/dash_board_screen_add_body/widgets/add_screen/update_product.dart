@@ -48,7 +48,7 @@ class _UpdateProductState extends State<UpdateProduct> {
       setState(() {
         sections = value;
         sections.forEach((element) {
-          if(element.id == widget.product.id){
+          if(element.id == widget.product.sectionId){
             nameController.text = widget.product.name;
             sectionController.text = element.name;
             descriptionController.text = widget.product.description;

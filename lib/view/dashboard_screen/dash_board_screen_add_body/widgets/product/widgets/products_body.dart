@@ -82,6 +82,7 @@ class _ItemBodyState extends State<ItemBody> {
               child: IconButton(
                 icon: Icon(Icons.update),
                 onPressed: () {
+                  print(widget.product);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
